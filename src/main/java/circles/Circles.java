@@ -21,6 +21,8 @@ public class Circles extends VBox {
     public static final int ROWS = 4;
     public static final int COLS = 5;
     public static final int CELL_SIZE = 100;
+    private int row = ROWS-1;
+    private int col = COLS-1;
 
     public Circles() {
         setAlignment(Pos.CENTER);
@@ -35,12 +37,19 @@ public class Circles extends VBox {
         addButtonHandler();  // You must write
     }
     
+    private void addToCanvas(Circle newCircle) {
+        
+        newCircle.setCenterX((CELL_SIZE/COLS)*2);
+        newCircle.setCenterY((CELL_SIZE/ROWS)*2);
+        canvas.getChildren().add(newCircle);
+    }
+    
     /**
      * This method adds the handler to the button that gives
      * this application its behavior.
      */
     private void addButtonHandler() {
-        // You must write
+        starter.setOnAction(e -> addToCanvas(new Circle(CELL_SIZE/4)));
     }
     
     private Pane canvas;
