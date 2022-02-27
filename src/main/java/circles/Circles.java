@@ -34,13 +34,14 @@ public class Circles extends VBox {
         
         getChildren().addAll(canvas, starter);
         
-        addButtonHandler();  // You must write
+        addButtonHandler();  
     }
     
     private void addToCanvas(Circle newCircle) {
-        
-        newCircle.setCenterX((CELL_SIZE/COLS)*2);
-        newCircle.setCenterY((CELL_SIZE/ROWS)*2);
+        double toX = (CELL_SIZE/col)*2;
+        double toY = (CELL_SIZE/row)*2;
+        newCircle.setCenterX(CELL_SIZE*col);
+        newCircle.setCenterY(CELL_SIZE*row);
         canvas.getChildren().add(newCircle);
     }
     
