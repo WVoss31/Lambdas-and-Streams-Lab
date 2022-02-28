@@ -21,8 +21,8 @@ public class Circles extends VBox {
     public static final int ROWS = 4;
     public static final int COLS = 5;
     public static final int CELL_SIZE = 100;
-    private int row;
-    private int col;
+    private int row = 0;
+    private int col = 0;
 
     public Circles() {
         setAlignment(Pos.CENTER);
@@ -40,12 +40,30 @@ public class Circles extends VBox {
     }
     
     private void addToCanvas(Circle newCircle) {
+        double fromX = ((COLS-1)*CELL_SIZE) + (CELL_SIZE/2);
+        double fromY = ((ROWS-1)*CELL_SIZE) + (CELL_SIZE/2);
         double toX = (col * CELL_SIZE) + (CELL_SIZE / 2);
         double toY = (row * CELL_SIZE) + (CELL_SIZE / 2);
-        newCircle.setCenterX(toX);
-        newCircle.setCenterY(toY);
+        newCircle.setCenterX(fromX);
+        newCircle.setCenterY(fromY);
         newCircle.setFill(new Color(Math.random(), Math.random(), Math.random(), 1.0));
+        
         canvas.getChildren().add(newCircle);
+        
+        TranslateTransition tt = new TranslateTransition(Duration.millis(500));
+        tt.setNode(newCircle);
+        tt.setByX(toX - fromX);
+        tt.setByY(toY - fromY);
+        tt.play();
+        
+        ScaleTransition st = new ScaleTransition(Duration.seconds(Math.random()));
+        st.setNode(newCircle);
+        st.setByX(1.0);
+        st.setByY(1.0);
+        st.setCycleCount(Animation.INDEFINITE);
+        st.setAutoReverse(true);
+        st.play();
+        
     }
     
     /**
@@ -53,7 +71,8 @@ public class Circles extends VBox {
      * this application its behavior.
      */
     private void addButtonHandler() {
-        starter.setOnAction(e -> addAllRowsToCanvas(makeAllRows()));
+        starter.setOnAction(e -> { canvas.getChildren().clear(); 
+           addAllRowsToCanvas(makeAllRows()); });
     }
     
     private Stream<Circle> makeRow() {
