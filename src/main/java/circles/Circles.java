@@ -21,8 +21,8 @@ public class Circles extends VBox {
     public static final int ROWS = 4;
     public static final int COLS = 5;
     public static final int CELL_SIZE = 100;
-    private int row = ROWS-1;
-    private int col = COLS-1;
+    private int row;
+    private int col;
 
     public Circles() {
         setAlignment(Pos.CENTER);
@@ -35,13 +35,16 @@ public class Circles extends VBox {
         getChildren().addAll(canvas, starter);
         
         addButtonHandler();  
+        
+        makeAllRows().forEach(r -> r.forEach(x -> System.out.println(x)));
     }
     
     private void addToCanvas(Circle newCircle) {
-        double toX = (CELL_SIZE/col)*2;
-        double toY = (CELL_SIZE/row)*2;
-        newCircle.setCenterX(CELL_SIZE*col);
-        newCircle.setCenterY(CELL_SIZE*row);
+        double toX = (col * CELL_SIZE) + (CELL_SIZE / 2);
+        double toY = (row * CELL_SIZE) + (CELL_SIZE / 2);
+        newCircle.setCenterX(toX);
+        newCircle.setCenterY(toY);
+        newCircle.setFill(new Color(Math.random(), Math.random(), Math.random(), 1.0));
         canvas.getChildren().add(newCircle);
     }
     
@@ -50,7 +53,26 @@ public class Circles extends VBox {
      * this application its behavior.
      */
     private void addButtonHandler() {
-        starter.setOnAction(e -> addToCanvas(new Circle(CELL_SIZE/4)));
+        starter.setOnAction(e -> addAllRowsToCanvas(makeAllRows()));
+    }
+    
+    private Stream<Circle> makeRow() {
+        return Stream.generate(() -> new Circle(CELL_SIZE/4)).limit(COLS);
+    }
+    
+    private void addRowToCanvas(Stream<Circle> stream) {
+        col = 0;
+        stream.forEach(c -> {addToCanvas(c);
+                            col++;} );
+    }
+    
+    private Stream<Stream<Circle>> makeAllRows() {
+        return Stream.generate(() -> makeRow()).limit(ROWS);
+    }
+    
+    private void addAllRowsToCanvas(Stream<Stream<Circle>> grid) {
+        row = 0;
+        grid.forEach(r -> {addRowToCanvas(r); row++;} );
     }
     
     private Pane canvas;
