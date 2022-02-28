@@ -56,7 +56,7 @@ public class Circles extends VBox {
         tt.setByY(toY - fromY);
         tt.play();
         
-        ScaleTransition st = new ScaleTransition(Duration.seconds(Math.random()));
+        ScaleTransition st = new ScaleTransition(Duration.millis((250 * Math.random() + 500)));
         st.setNode(newCircle);
         st.setByX(1.0);
         st.setByY(1.0);
